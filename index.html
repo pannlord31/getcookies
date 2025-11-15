@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FBCOOKIEGETTER</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Rubik:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            min-height: 50vh;
+            transition: background-color 0.3s ease;
+            min-width: 300px;
+        }
+
+        .dark-mode {
+            background-color: #1a1a1a;
+            color: #f4f4f4;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            padding: 15px 20px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 30;
+            background-color: rgba(244, 244, 244, 0.9);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .dark-mode header {
+            background-color: rgba(26, 26, 26, 0.9);
+            box-shadow: 0 2px 10px rgba(255, 255, 255, 0.05);
+        }
+
+        .h-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+            color: #555;
+            text-decoration: none;
+            cursor: pointer;
+            transition: opacity 0.3s ease;
+        }
+
+        .h-title:hover {
+            opacity: 0.8;
+        }
+
+        .dark-mode .h-title {
+            color: #bbb;
+        }
+
+        .h-title img {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            background-color: black;
+            border: 1px solid gray;
+            padding: 4px;
+        }
+
+        .t-title {
+            text-decoration: none;
+            color: inherit;
+            transition: color 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .t-title:hover {
+            color: #007bff;
+        }
+
+        .dark-mode .t-title {
+            color: #64b5f6;
+        }
+        
+        .dark-mode .h-title img {
+            background-color: black;
+            border: 1px solid white;
+        }
+
+        .dark-mode-toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 50%;
+            outline: none;
+            transition: transform 0.2s ease, opacity 0.3s ease;
+            font-size: 1.2rem;
+            line-height: 1;
+            color: #555;
+        }
+
+        .dark-mode-toggle:hover {
+            transform: scale(1.1);
+            opacity: 0.8;
+        }
+
+        .dark-mode .dark-mode-toggle {
+            color: #bbb;
+        }
+
+        .dark-mode-toggle .sun-icon {
+            display: block;
+        }
+
+        .dark-mode .dark-mode-toggle .sun-icon {
+            display: none;
+        }
+
+        .dark-mode-toggle .moon-icon {
+            display: none;
+        }
+
+        .dark-mode .dark-mode-toggle .moon-icon {
+            display: block;
+        }
+
+        .left-menu-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            background-color: #fff;
+            border-right: 1px solid #ddd;
+            box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            z-index: 20;
+            transform: translateX(-100%);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: stretch;
+            padding-top: 100px;
+            min-width: 200px;
+        }
+
+        .dark-mode .left-menu-container {
+            background-color: #262626;
+            border-color: #555;
+            box-shadow: 2px 0 8px rgba(255, 255, 255, 0.05);
+        }
+
+        .left-menu-container.open {
+            transform: translateX(0);
+        }
+
+        .left-menu-container button,
+        .left-menu-container label {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 18px;
+            text-align: left;
+            text-decoration: none;
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 400;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease, opacity 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            transform: translateX(-10px);
+            animation: slideInRightMenu 0.3s ease-out forwards 0.3s;
+            width: 100%;
+            margin-bottom: 8px;
+        }
+
+        .left-menu-container button.btn_imp,
+        .left-menu-container label.btn_imp {
+            background-color: #28a745;
+        }
+
+        .left-menu-container button.btn_exp {
+            background-color: #ffc107;
+            color: #333;
+        }
+
+        .left-menu-container button.btn_logout {
+            background-color: #dc3545;
+        }
+
+        .dark-mode .left-menu-container button,
+        .dark-mode .left-menu-container label {
+            box-shadow: 0 2px 5px rgba(255, 255, 255, 0.08);
+        }
+
+        .left-menu-container button:hover,
+        .left-menu-container label:hover {
+            opacity: 0.9;
+            transform: translateX(-2px);
+            box-shadow: 0 3px 7px rgba(0, 0, 0, 0.2);
+        }
+
+        .dark-mode .left-menu-container button:hover,
+        .dark-mode .left-menu-container label:hover {
+            box-shadow: 0 3px 7px rgba(255, 255, 255, 0.15);
+        }
+
+        .content-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 20px;
+            padding-top: 60px;
+        }
+
+        .text-area-container {
+            position: relative;
+            width: 100%;
+            margin-bottom: 20px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: slideInUp 0.7s ease-out 0.4s forwards;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+
+        .text-area-container .topic {
+            font-size: 1.1rem;
+            font-weight: 400;
+            color: #333;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .dark-mode .text-area-container .topic {
+            color: #eee;
+            opacity: 0.9;
+        }
+
+        .textarea-wrapper {
+            position: relative;
+        }
+
+        .text-area-container textarea {
+            width: 100%;
+            height: 500px;
+            padding: 10px;
+            font-size: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            outline: none;
+            background-color: #f9f9f9;
+            resize: vertical;
+            transition: border-color 0.3s ease, background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .text-area-container textarea:focus {
+            border-color: #007bff;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05), 0 0 5px rgba(0, 123, 255, 0.25);
+        }
+
+        .dark-mode .text-area-container textarea {
+            border-color: #555;
+            background-color: #333;
+            color: #ccc;
+            box-shadow: inset 0 1px 3px rgba(255, 255, 255, 0.03);
+        }
+
+        .dark-mode .text-area-container textarea:focus {
+            border-color: #64b5f6;
+            box-shadow: inset 0 1px 3px rgba(255, 255, 255, 0.03), 0 0 5px rgba(100, 181, 246, 0.25);
+        }
+
+        .textarea-actions-overlay {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            display: flex;
+            gap: 6px;
+            z-index: 10;
+        }
+
+        .textarea-actions-overlay button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 4px 8px;
+            text-align: center;
+            text-decoration: none;
+            font-size: 0.7rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease, opacity 0.3s ease;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .textarea-actions-overlay button:hover {
+            background-color: #1e7e34;
+            opacity: 0.9;
+        }
+
+        .dark-mode .textarea-actions-overlay button {
+            background-color: #388E3C;
+            box-shadow: 0 1px 2px rgba(255, 255, 255, 0.05);
+        }
+
+        .dark-mode .textarea-actions-overlay button:hover {
+            background-color: #2E7D32;
+            opacity: 0.9;
+        }
+
+        .action-buttons {
+            display: none;
+        }
+
+        #snackbar {
+            visibility: hidden;
+            min-width: 200px;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 12px;
+            position: fixed;
+            z-index: 1;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.9rem;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .dark-mode #snackbar {
+            background-color: #eee;
+            color: #333;
+        }
+
+        #snackbar.show {
+            visibility: visible;
+            opacity: 1;
+            animation: fadein 0.5s, fadeout 0.5s 2.5s;
+        }
+
+        @keyframes fadein {
+            from {
+                bottom: 0;
+                opacity: 0;
+            }
+
+            to {
+                bottom: 20px;
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeout {
+            from {
+                bottom: 20px;
+                opacity: 1;
+            }
+
+            to {
+                bottom: 0;
+                opacity: 0;
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInRightMenu {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <div class="h-title" id="h-title">
+            <img src="./logo/128.png" alt="logo">
+            <span class="t-title">fbcookiegetter</span>
+        </div>
+        <button class="dark-mode-toggle" id="darkModeToggle">
+            <span class="sun-icon">☀️</span>
+            <span class="moon-icon">🌙</span>
+        </button>
+    </header>
+
+    <div class="left-menu-container" id="leftMenu">
+        <button id="export" class="btn_exp">Get cookie (JSON)</button>
+        <button id="exportenc" class="btn_exp">Get cookie (encrypted)</button>
+        <button id="exportbase64" class="btn_exp">Get cookie (base64)</button>
+        <button id="exportpayload" class="btn_exp">Get cookie (payload)</button>
+        <button id="logout" class="btn_logout">Logout (cookie will not die)</button>
+    </div>
+
+    <div class="content-area">
+        <div class="text-area-container">
+            <div class="topic">YOUR FACEBOOK COOKIE</div>
+            <div class="textarea-wrapper">
+                <textarea id="yourFbstate" placeholder="Your fb cookie here" readonly></textarea>
+                <div class="textarea-actions-overlay">
+                    <button id="btnCopy" class="overlay-button" style="color: white;">Copy</button>
+                    <button id="btnDownload" class="overlay-button" style="color: white;">Download</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div id="snackbar"></div>
+
+    <script src="sha256.js"></script>
+    <script src="aes.js"></script>
+    <script src="script.js"></script>
+    <script src="setting.js"></script>
+</body>
+<style>
+    .ripple {
+        position: absolute;
+        border-radius: 50%;
+        transform: scale(0);
+        animation: ripple-effect 0.6s linear;
+        background-color: rgba(255, 255, 255, 0.4);
+        pointer-events: none;
+    }
+
+    @keyframes ripple-effect {
+        to {
+            transform: scale(4);
+            opacity: 0;
+        }
+    }
+</style>
+</html>
