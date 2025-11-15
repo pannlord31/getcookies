@@ -1,0 +1,34 @@
+{
+  "name": "Facebook cookie getter",
+  "version": "1.0",
+  "description": "Get your facebook cookie can be used at auto share, bot and more.",
+  "permissions": [
+    "cookies",
+    "activeTab",
+    "https://*.facebook.com/"
+  ],
+  "background": {
+    "scripts": [
+        "index.js"
+    ],
+    "persistent": false
+  },
+  "browser_action": {
+    "default_popup": "index.html",
+    "default_icon": {
+      "16": "logo/16.png",
+      "32": "logo/32.png",
+      "48": "logo/48.png",
+      "64": "logo/64.png",
+      "128": "logo/128.png"
+    }
+  },
+  "icons": {
+    "16": "logo/16.png",
+    "32": "logo/32.png",
+    "48": "logo/48.png",
+    "64": "logo/64.png",
+    "128": "logo/128.png"
+  },
+  "manifest_version": 2
+}
